@@ -1,0 +1,169 @@
+PROJECT CHANGES SUMMARY
+
+1. Next.js Migration / Project Structure
+- Converted the frontend into a full Next.js Pages Router project.
+- Added route files under frontend/pages for public pages, admin pages, dynamic pages, sitemap.xml, and robots.txt.
+- Replaced the old React Router style compatibility layer with native Next.js routing.
+- Removed the old router compatibility files:
+  - src/next/routerCompat.jsx
+  - src/next/PageShell.jsx
+  - src/admin/routes/AdminRoutes.jsx
+- Public pages now use PublicLayout directly.
+- Admin pages now use AdminLayout directly.
+- Navigation now uses next/link and next/router.
+- Existing public URLs were preserved wherever possible.
+- UI structure and appearance were kept unchanged.
+
+2. SSR and SEO
+- Added Server-Side Rendering where needed for SEO and dynamic content.
+- Added getServerSideProps to SEO-sensitive pages.
+- Dynamic SSR routes include:
+  - /
+  - /courses
+  - /astrology-courses
+  - /astrologer-courses
+  - /vastu-courses
+  - /courses/[courseSlug]/details
+  - /courses/[courseSlug]/book
+  - /consultation/[category]/[slug]
+  - /consultation/[category]/[slug]/book
+  - /appointment/confirmation/[bookingId]
+  - /sitemap.xml
+  - /robots.txt
+- Added dynamic meta title support.
+- Added dynamic meta description support.
+- Added dynamic meta keywords support.
+- Added Open Graph metadata.
+- Added Twitter Card metadata.
+- Added reusable SEO helper logic.
+- Added automatic sitemap.xml generation.
+- Added automatic robots.txt generation.
+- Verified SSR/static route output with next build.
+
+3. Booking System
+- Added booking workflow support for:
+  - Astrology Consultation
+  - Vastu Consultation
+  - Astrology Courses
+  - Vastu Courses
+- Connected Book Now and Book A Seat buttons to the booking flow.
+- Booking pages receive product/service information automatically.
+- Booking form shows:
+  - Product ID
+  - Product Name
+  - Product Image
+  - Product Price
+  - Product Category
+- Users can clearly see which service or course they are booking.
+
+4. Booking Form
+- Added complete booking form fields:
+  - Full Name
+  - Email Address
+  - Mobile Number
+  - Alternate Mobile Number
+  - Gender
+  - Date of Birth
+  - Occupation
+  - Country
+  - State
+  - City
+  - Pin Code
+  - Full Address
+  - Message / Remarks
+- Added auto-filled product information fields.
+- Added mandatory Terms & Conditions checkbox validation.
+- Added user-facing validation and submission states.
+
+5. Razorpay Payment Integration
+- Integrated Razorpay payment flow with the booking process.
+- Booking form submission creates the payment flow.
+- Razorpay checkout opens after form submission.
+- Server-side payment verification was added.
+- Payment status is stored and reflected in booking data.
+- Supported payment statuses:
+  - Pending
+  - Success
+  - Failed
+  - Cancelled
+  - Refunded
+- Added user success and failure messages for payment outcomes.
+
+6. Database and Booking Storage
+- Added booking storage structure for complete booking records.
+- Stored required booking data:
+  - Booking ID
+  - Product Information
+  - Customer Information
+  - Booking Information
+  - Payment Information
+  - Razorpay Information
+  - Booking Date
+- Booking and payment data were structured for admin management.
+
+7. Admin Booking Management
+- Added booking management in the admin panel.
+- Admin booking list displays:
+  - Booking ID
+  - Product ID
+  - Product Name
+  - Product Image
+  - Product Price
+  - Customer Name
+  - Email
+  - Mobile Number
+  - Full Address
+  - Occupation
+  - Remarks / Message
+  - Razorpay Order ID
+  - Razorpay Payment ID
+  - Payment Status
+  - Booking Date
+- Added dedicated booking details page.
+- Admin can open and view complete booking, customer, product, and payment information.
+
+8. Admin Filters and Export
+- Added booking filters for:
+  - Date
+  - Payment Status
+  - Product Type
+- Added booking export functionality.
+- Supported export formats:
+  - CSV
+  - Excel
+
+9. TinyMCE Standardization
+- Created one reusable TinyMCE editor component.
+- Reused the common editor wherever content editing is required.
+- TinyMCE API key is loaded from environment variables only.
+- Removed hardcoded TinyMCE API key usage.
+
+10. Image Management Improvements
+- Added recommended image dimension hints near admin image upload fields.
+- Image size guidance was added for areas such as:
+  - Hero Banner
+  - Service Image
+  - Blog Image
+  - Course Image
+- Improved image replacement workflow:
+  - Upload new image
+  - Delete old image from storage
+  - Update database reference
+- Improved image deletion workflow:
+  - Delete image file from storage
+  - Remove related database record
+
+11. Validation and Testing
+- Verified lint with npm run lint.
+- Verified production build with npm run build.
+- Confirmed Next.js route output includes SSR routes.
+- Confirmed sitemap.xml and robots.txt are generated as dynamic server-rendered routes.
+- Confirmed the dev server responds successfully on localhost.
+
+12. Current Technical Status
+- The frontend is now a full Next.js project.
+- It uses the Next.js Pages Router.
+- It supports SSR for dynamic and SEO-sensitive pages.
+- Static pages remain statically prerendered where SSR is not required.
+- The old React Router compatibility layer has been removed.
+- Public UI was preserved while adding the requested features and migration changes.

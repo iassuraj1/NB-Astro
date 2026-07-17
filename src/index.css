@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+/* ============================================ */
+/* DARK THEME STYLES - Your Theme */
+/* ============================================ */
+body {
+    background: linear-gradient(135deg, #000000 0%, #001A1A 100%);
+    color: #00B7B3;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================ */
+/* ANIMATIONS - Keep All */
+/* ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.2s ease-out;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 6s ease-in-out infinite;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* ============================================ */
+/* CUSTOM SCROLLBAR - Merged */
+/* ============================================ */
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00B7B3;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #33C5C2;
+}
+
+/* Mobile Drawer Scrollbar - Thinner */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(0, 183, 179, 0.1);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #00B7B3;
+  border-radius: 4px;
+}
+
+/* ============================================ */
+/* GLASS MORPHISM EFFECTS */
+/* ============================================ */
+.glass {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============================================ */
+/* HOVER EFFECTS */
+/* ============================================ */
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================ */
+/* UTILITY CLASSES - Your Theme Colors */
+/* ============================================ */
+.text-primary {
+  color: #00B7B3;
+}
+
+.bg-primary {
+  background-color: #00B7B3;
+}
+
+.border-primary {
+  border-color: #00B7B3;
+}
+
+.hover\:text-primary:hover {
+  color: #00B7B3;
+}
+
+.hover\:bg-primary:hover {
+  background-color: #00B7B3;
+}
+
+.hover\:border-primary:hover {
+  border-color: #00B7B3;
+}
+
+/* Primary Light Variant */
+.text-primary-light {
+  color: #33C5C2;
+}
+
+.bg-primary-light {
+  background-color: #33C5C2;
+}
+
+/* ============================================ */
+/* GRADIENT BACKGROUNDS */
+/* ============================================ */
+.bg-gradient-dark {
+  background: linear-gradient(135deg, #000000 0%, #001A1A 100%);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #00B7B3 0%, #33C5C2 100%);
+}
+
+/* ============================================ */
+/* TRANSITIONS */
+/* ============================================ */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
