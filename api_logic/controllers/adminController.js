@@ -171,6 +171,17 @@ const updateAdminProfile = async (req, res, next) => {
 
         admin.name = req.body.name || admin.name;
 
+        if (req.body.email && req.body.email.toLowerCase() !== admin.email.toLowerCase()) {
+            const emailExists = await Admin.findOne({ email: req.body.email.toLowerCase() });
+            if (emailExists) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Admin with this email already exists'
+                });
+            }
+            admin.email = req.body.email.toLowerCase();
+        }
+
         if (req.body.password) {
             admin.password = req.body.password;
         }

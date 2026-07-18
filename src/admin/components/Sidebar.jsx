@@ -2130,6 +2130,21 @@ const Sidebar = () => {
                     <span className="text-lg">ℹ️</span>
                     <span className="text-sm font-medium">About Page</span>
                 </NavLink>
+
+                {/* Settings & Admin Management */}
+                <NavLink
+                    href="/admin/settings"
+                    className={({ isActive }) =>
+                        `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all ${
+                            isActive
+                                ? 'bg-[#00B7B3]/10 text-[#00B7B3]'
+                                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                        }`
+                    }
+                >
+                    <span className="text-lg">⚙️</span>
+                    <span className="text-sm font-medium">Settings</span>
+                </NavLink>
             </nav>
 
             {/* User Info & Logout */}

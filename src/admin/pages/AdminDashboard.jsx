@@ -70,11 +70,9 @@ const AdminDashboard = () => {
                     <a href="/admin/courses" className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition">
                         Manage Courses
                     </a>
-                    {stats?.admin?.role === 'superadmin' && (
-                        <a href="/admin/admins" className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition">
-                            Manage Admins
-                        </a>
-                    )}
+                    <a href="/admin/settings" className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition">
+                        ⚙️ Settings & Management
+                    </a>
                 </div>
             </div>
         </div>
