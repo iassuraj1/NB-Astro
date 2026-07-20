@@ -785,6 +785,11 @@ exports.updateHeroSlide = async (req, res) => {
             mobileImage: oldSlide.mobileImage
         });
         
+        // ✅ DEBUG: Check req.body
+        console.log('📋 req.body:', req.body);
+        console.log('📋 req.body.image:', req.body.image);
+        console.log('📋 req.body.mobileImage:', req.body.mobileImage);
+        
         // Prepare update data from req.body
         const updateData = {
             title: req.body.title,
@@ -796,44 +801,23 @@ exports.updateHeroSlide = async (req, res) => {
             isActive: req.body.isActive === 'true' || req.body.isActive === true
         };
         
-        // Process files from req.files
-        let newImageFile = null;
-        let newMobileImageFile = null;
+        // ✅ Get image paths from req.body (NOT req.files)
+        const newImage = req.body.image || '';
+        const newMobileImage = req.body.mobileImage || '';
         
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                console.log(`File received: ${file.fieldname} -> ${file.filename}`);
-                if (file.fieldname === 'image') {
-                    newImageFile = file;
-                }
-                if (file.fieldname === 'mobileImage') {
-                    newMobileImageFile = file;
-                }
-            }
-        }
+        console.log('📸 New image from body:', newImage);
+        console.log('📸 New mobileImage from body:', newMobileImage);
         
-        // Helper to delete old image
-        const deleteOldImage = (imagePath) => {
-            if (imagePath && imagePath.startsWith('/uploads/')) {
-                const fullPath = path.join(process.cwd(), 'public', imagePath);
-                if (fs.existsSync(fullPath)) {
-                    fs.unlinkSync(fullPath);
-                    console.log('🗑️ Deleted:', imagePath);
-                }
-            }
-        };
-        
-        // Update desktop image
-        if (newImageFile) {
-            updateData.image = `/uploads/hero/${newImageFile.filename}`;
+        // ✅ Update images
+        if (newImage) {
+            updateData.image = newImage;
             console.log('✅ New desktop image:', updateData.image);
         } else {
             updateData.image = oldSlide.image;
         }
         
-        // Update mobile image
-        if (newMobileImageFile) {
-            updateData.mobileImage = `/uploads/hero/${newMobileImageFile.filename}`;
+        if (newMobileImage) {
+            updateData.mobileImage = newMobileImage;
             console.log('✅ New mobile image:', updateData.mobileImage);
         } else {
             updateData.mobileImage = oldSlide.mobileImage;
@@ -853,18 +837,26 @@ exports.updateHeroSlide = async (req, res) => {
             mobileImage: slide.mobileImage
         });
         
+        // ✅ Delete old images if they were replaced
         const oldImagesToDelete = [];
-        if (newImageFile && oldSlide.image && oldSlide.image !== updateData.image) oldImagesToDelete.push(oldSlide.image);
-        if (newMobileImageFile && oldSlide.mobileImage && oldSlide.mobileImage !== updateData.mobileImage) oldImagesToDelete.push(oldSlide.mobileImage);
-        try {
-            deleteUploadFiles(oldImagesToDelete);
-        } catch (deleteError) {
-            await HeroSlide.findByIdAndUpdate(id, {
-                image: oldSlide.image,
-                mobileImage: oldSlide.mobileImage,
-            }, { runValidators: true });
-            deleteUploadFiles([updateData.image, updateData.mobileImage].filter((imagePath) => ![oldSlide.image, oldSlide.mobileImage].includes(imagePath)));
-            throw new Error(`Hero image replacement failed: ${deleteError.message}`);
+        if (newImage && oldSlide.image && oldSlide.image !== newImage) {
+            oldImagesToDelete.push(oldSlide.image);
+        }
+        if (newMobileImage && oldSlide.mobileImage && oldSlide.mobileImage !== newMobileImage) {
+            oldImagesToDelete.push(oldSlide.mobileImage);
+        }
+        
+        console.log('🗑️ Old images to delete:', oldImagesToDelete);
+        
+        if (oldImagesToDelete.length > 0) {
+            try {
+                deleteUploadFiles(oldImagesToDelete);
+                console.log('✅ Old images deleted successfully');
+            } catch (deleteError) {
+                console.error('❌ Delete error:', deleteError);
+            }
+        } else {
+            console.log('ℹ️ No old images to delete');
         }
 
         res.json({ 

@@ -326,6 +326,77 @@ const changePassword = async (req, res, next) => {
     }
 };
 
+// ==================== Update Admin by Super Admin ====================
+const updateAdminBySuperAdmin = async (req, res, next) => {
+    try {
+        if (req.admin.role !== 'superadmin') {
+            return res.status(403).json({
+                success: false,
+                message: 'Only super admin can update other administrators'
+            });
+        }
+
+        const admin = await Admin.findById(req.params.id);
+        if (!admin) {
+            return res.status(404).json({
+                success: false,
+                message: 'Admin account not found'
+            });
+        }
+
+        // Do not allow changing the super admin's role
+        if (admin.role === 'superadmin' && req.body.role && req.body.role !== 'superadmin') {
+            return res.status(400).json({
+                success: false,
+                message: 'Cannot change Super Admin role'
+            });
+        }
+
+        admin.name = req.body.name || admin.name;
+
+        if (req.body.email && req.body.email.toLowerCase() !== admin.email.toLowerCase()) {
+            const emailExists = await Admin.findOne({ email: req.body.email.toLowerCase() });
+            if (emailExists) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'An administrator with this email already exists'
+                });
+            }
+            admin.email = req.body.email.toLowerCase();
+        }
+
+        if (req.body.role) {
+            admin.role = req.body.role;
+        }
+
+        if (req.body.password && req.body.password.trim() !== '') {
+            if (req.body.password.length < 6) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Password must be at least 6 characters long'
+                });
+            }
+            admin.password = req.body.password;
+        }
+
+        await admin.save();
+
+        res.json({
+            success: true,
+            message: 'Administrator updated successfully',
+            admin: {
+                _id: admin._id,
+                name: admin.name,
+                email: admin.email,
+                role: admin.role,
+                isActive: admin.isActive
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createSuperAdmin,
     createAdmin,
@@ -335,5 +406,6 @@ module.exports = {
     getAllAdmins,
     toggleAdminStatus,
     deleteAdmin,
-    changePassword
+    changePassword,
+    updateAdminBySuperAdmin
 };

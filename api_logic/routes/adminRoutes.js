@@ -9,7 +9,8 @@ const {
     getAllAdmins,
     toggleAdminStatus,
     deleteAdmin,
-    changePassword
+    changePassword,
+    updateAdminBySuperAdmin
 } = require('../controllers/adminController');
 const { protect } = require('../middleware/authMiddleware');
 
@@ -25,7 +26,9 @@ router.put('/change-password', protect, changePassword);       // Change passwor
 // ==================== Super Admin Only Routes ====================
 router.post('/create', protect, createAdmin);                  // Create admin/editor
 router.get('/all', protect, getAllAdmins);                     // Get all admins
+router.put('/:id', protect, updateAdminBySuperAdmin);          // Update admin/editor details
 router.patch('/:id/toggle-status', protect, toggleAdminStatus); // Activate/Deactivate
 router.delete('/:id', protect, deleteAdmin);                   // Delete admin
 
 module.exports = router;
+

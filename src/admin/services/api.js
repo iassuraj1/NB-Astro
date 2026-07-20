@@ -461,6 +461,7 @@ export const adminAPI = {
     changePassword: (data) => api.put('/admin/change-password', data),
     getAllAdmins: () => api.get('/admin/all'),
     createAdmin: (data) => api.post('/admin/create', data),
+    updateAdmin: (id, data) => api.put(`/admin/${id}`, data),
     toggleAdminStatus: (id) => api.patch(`/admin/${id}/toggle-status`),
     deleteAdmin: (id) => api.delete(`/admin/${id}`)
 };
