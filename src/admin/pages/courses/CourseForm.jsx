@@ -564,14 +564,14 @@ const handleImageUpload = async (e) => {
                 </div>
 
                 {/* Basic Tab */}
-                {activeTab === 'basic' && (
+                <div className={activeTab === 'basic' ? 'block' : 'hidden'}>
                     <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6 space-y-4">
                         <div>
                             <label className="block text-sm text-gray-400 mb-2">Course Title</label>
                             <input 
                                 type="text" 
                                 value={formData.title} 
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+                                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))} 
                                 className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" 
                                 required 
                             />
@@ -628,14 +628,14 @@ const handleImageUpload = async (e) => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm text-gray-400 mb-2">Category</label>
-                                <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white">
+                                <select value={formData.category} onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white">
                                     <option value="ASTROLOGY COURSES">✨ Astrology</option>
                                     <option value="VASTU COURSES">🏠 Vastu</option>
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-sm text-gray-400 mb-2">Level</label>
-                                <select value={formData.level} onChange={(e) => setFormData({ ...formData, level: e.target.value })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white">
+                                <select value={formData.level} onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white">
                                     <option value="">Select Level</option>
                                     <option value="Beginner">Beginner</option>
                                     <option value="Intermediate">Intermediate</option>
@@ -645,29 +645,29 @@ const handleImageUpload = async (e) => {
                         </div>
                         <div>
                             <label className="block text-sm text-gray-400 mb-2">Language</label>
-                            <input type="text" value={formData.language} onChange={(e) => setFormData({ ...formData, language: e.target.value })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <input type="text" value={formData.language} onChange={(e) => setFormData(prev => ({ ...prev, language: e.target.value }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Pricing Tab */}
-                {activeTab === 'pricing' && (
+                <div className={activeTab === 'pricing' ? 'block' : 'hidden'}>
                     <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6">
                         <div className="grid grid-cols-2 gap-4">
-                            <div><label className="block text-sm text-gray-400 mb-2">Display Price</label><input type="text" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} placeholder="₹51,000" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Course Fee</label><input type="text" value={formData.courseFee} onChange={(e) => setFormData({ ...formData, courseFee: e.target.value })} placeholder="51,000 INR" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Start Date</label><input type="text" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} placeholder="7th Jan 2025" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Timing</label><input type="text" value={formData.timing} onChange={(e) => setFormData({ ...formData, timing: e.target.value })} placeholder="Saturday 8-10 PM" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Duration</label><input type="text" value={formData.courseDuration} onChange={(e) => setFormData({ ...formData, courseDuration: e.target.value })} placeholder="4 months (12 sessions)" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Modules</label><input type="number" value={formData.modules} onChange={(e) => setFormData({ ...formData, modules: parseInt(e.target.value) || 0 })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Class Type</label><select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white"><option>Online</option><option>Offline</option><option>Hybrid</option></select></div>
-                            <div><label className="block text-sm text-gray-400 mb-2">Location</label><input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} placeholder="Zoom / Google Meet" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Display Price</label><input type="text" value={formData.price} onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))} placeholder="₹51,000" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Course Fee</label><input type="text" value={formData.courseFee} onChange={(e) => setFormData(prev => ({ ...prev, courseFee: e.target.value }))} placeholder="51,000 INR" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Start Date</label><input type="text" value={formData.date} onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))} placeholder="7th Jan 2025" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Timing</label><input type="text" value={formData.timing} onChange={(e) => setFormData(prev => ({ ...prev, timing: e.target.value }))} placeholder="Saturday 8-10 PM" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Duration</label><input type="text" value={formData.courseDuration} onChange={(e) => setFormData(prev => ({ ...prev, courseDuration: e.target.value }))} placeholder="4 months (12 sessions)" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Modules</label><input type="number" value={formData.modules} onChange={(e) => setFormData(prev => ({ ...prev, modules: parseInt(e.target.value) || 0 }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Class Type</label><select value={formData.type} onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white"><option>Online</option><option>Offline</option><option>Hybrid</option></select></div>
+                            <div><label className="block text-sm text-gray-400 mb-2">Location</label><input type="text" value={formData.location} onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))} placeholder="Zoom / Google Meet" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" /></div>
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Content Tab - Enhanced Dark Theme Editor */}
-                {activeTab === 'content' && (
+                <div className={activeTab === 'content' ? 'block' : 'hidden'}>
                     <div className="space-y-6">
                         {/* Editor Instructions */}
                         <div className="bg-[#00B7B3]/10 border border-[#00B7B3]/30 rounded-lg p-4">
@@ -695,7 +695,7 @@ const handleImageUpload = async (e) => {
                             <div className="dark-quill">
                                 <TinyMCEEditor
                                     value={formData.whatIs}
-                                    onChange={(value) => setFormData({ ...formData, whatIs: value })}
+                                    onChange={(value) => setFormData(prev => ({ ...prev, whatIs: value }))}
                                     placeholder="Write about the course with rich formatting... Use headings, colors, lists, and images!"
                                     minHeight={320}
                                 />
@@ -714,7 +714,7 @@ const handleImageUpload = async (e) => {
                             <div className="dark-quill">
                                 <TinyMCEEditor
                                     value={formData.aboutCourse}
-                                    onChange={(value) => setFormData({ ...formData, aboutCourse: value })}
+                                    onChange={(value) => setFormData(prev => ({ ...prev, aboutCourse: value }))}
                                     placeholder="Detailed description with headings, bullet points, images, videos..."
                                     minHeight={420}
                                 />
@@ -743,19 +743,19 @@ const handleImageUpload = async (e) => {
                         {/* Duration Details */}
                         <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6">
                             <label className="block text-white font-medium mb-2">Duration Details</label>
-                            <textarea rows="2" value={formData.durationDetails} onChange={(e) => setFormData({ ...formData, durationDetails: e.target.value })} placeholder="4 months course with 12 live sessions + practical assignments." className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <textarea rows="2" value={formData.durationDetails} onChange={(e) => setFormData(prev => ({ ...prev, durationDetails: e.target.value }))} placeholder="4 months course with 12 live sessions + practical assignments." className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                         </div>
 
                         {/* Special Note */}
                         <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6">
                             <label className="block text-white font-medium mb-2">Special Note</label>
-                            <textarea rows="2" value={formData.note} onChange={(e) => setFormData({ ...formData, note: e.target.value })} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <textarea rows="2" value={formData.note} onChange={(e) => setFormData(prev => ({ ...prev, note: e.target.value }))} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Features Tab */}
-                {activeTab === 'features' && (
+                <div className={activeTab === 'features' ? 'block' : 'hidden'}>
                     <div className="grid grid-cols-2 gap-6">
                         <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6">
                             <div className="flex justify-between items-center mb-3">
@@ -783,10 +783,10 @@ const handleImageUpload = async (e) => {
                             ))}
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* SEO Tab */}
-                {activeTab === 'seo' && (
+                <div className={activeTab === 'seo' ? 'block' : 'hidden'}>
                     <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6 space-y-4">
                         <div className="bg-black/60 border border-[#00B7B3]/30 rounded-lg p-3 mb-2">
                             <div className="flex items-center gap-2 text-sm mb-2">
@@ -800,38 +800,38 @@ const handleImageUpload = async (e) => {
                         </div>
                         <div>
                             <label className="block text-sm text-gray-400 mb-2">SEO Title (60 chars)</label>
-                            <input type="text" value={formData.seoTitle} onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })} maxLength="60" placeholder={formData.title} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <input type="text" value={formData.seoTitle} onChange={(e) => setFormData(prev => ({ ...prev, seoTitle: e.target.value }))} maxLength="60" placeholder={formData.title} className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                             <p className="text-gray-500 text-xs mt-1">{formData.seoTitle?.length || 0}/60 characters</p>
                         </div>
                         <div>
                             <label className="block text-sm text-gray-400 mb-2">SEO Description (160 chars)</label>
-                            <textarea rows="2" value={formData.seoDescription} onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })} maxLength="160" placeholder="Short description for search engines" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <textarea rows="2" value={formData.seoDescription} onChange={(e) => setFormData(prev => ({ ...prev, seoDescription: e.target.value }))} maxLength="160" placeholder="Short description for search engines" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                             <p className="text-gray-500 text-xs mt-1">{formData.seoDescription?.length || 0}/160 characters</p>
                         </div>
                         <div>
                             <label className="block text-sm text-gray-400 mb-2">SEO Keywords (comma separated)</label>
-                            <input type="text" value={formData.seoKeywords} onChange={(e) => setFormData({ ...formData, seoKeywords: e.target.value })} placeholder="astrology, vastu, course, online" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
+                            <input type="text" value={formData.seoKeywords} onChange={(e) => setFormData(prev => ({ ...prev, seoKeywords: e.target.value }))} placeholder="astrology, vastu, course, online" className="w-full px-4 py-2 bg-black/60 border border-gray-700 rounded-lg text-white" />
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* Status Tab */}
-                {activeTab === 'status' && (
+                <div className={activeTab === 'status' ? 'block' : 'hidden'}>
                     <div className="bg-black/40 border border-[#00B7B3]/20 rounded-2xl p-6 space-y-3">
                         <label className="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} className="w-4 h-4 accent-[#00B7B3]" />
+                            <input type="checkbox" checked={formData.isActive} onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))} className="w-4 h-4 accent-[#00B7B3]" />
                             <span className="text-white">✅ Active (visible to students)</span>
                         </label>
                         <label className="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" checked={formData.isFeatured} onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })} className="w-4 h-4 accent-[#00B7B3]" />
+                            <input type="checkbox" checked={formData.isFeatured} onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))} className="w-4 h-4 accent-[#00B7B3]" />
                             <span className="text-white">⭐ Featured (show on homepage)</span>
                         </label>
                         <label className="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" checked={formData.certificateAvailable} onChange={(e) => setFormData({ ...formData, certificateAvailable: e.target.checked })} className="w-4 h-4 accent-[#00B7B3]" />
+                            <input type="checkbox" checked={formData.certificateAvailable} onChange={(e) => setFormData(prev => ({ ...prev, certificateAvailable: e.target.checked }))} className="w-4 h-4 accent-[#00B7B3]" />
                             <span className="text-white">📜 Certificate Available</span>
                         </label>
                     </div>
-                )}
+                </div>
             </form>
         </div>
     );

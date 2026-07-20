@@ -444,7 +444,7 @@
 "use client";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -457,6 +457,22 @@ const RichTextEditor = ({
   placeholder = "Write content here..."
 }) => {
   const editorRef = useRef(null);
+  const [isRichText, setIsRichText] = useState(true);
+  const [activeApiKey, setActiveApiKey] = useState("no-api-key");
+
+  // Automatically detect if running locally to switch API key to "no-api-key"
+  // to prevent annoying domain warning popups.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hostname = window.location.hostname;
+      const isLocal = hostname === "localhost" || hostname === "127.0.0.1" || hostname.match(/^\d+\.\d+\.\d+\.\d+$/);
+      if (isLocal) {
+        setActiveApiKey("no-api-key");
+      } else {
+        setActiveApiKey(process.env.NEXT_PUBLIC_TINYMCE_API_KEY || "no-api-key");
+      }
+    }
+  }, []);
 
   const handleEditorChange = useCallback((content) => {
     if (onChange) {
@@ -536,195 +552,233 @@ const RichTextEditor = ({
 
   return (
     <div className={className}>
-      {/* Delete Button */}
-      <div className="mb-3 flex flex-wrap items-center gap-4 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-        <button
-          type="button"
-          onClick={handleImageDelete}
-          className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition flex items-center gap-2"
-        >
-          <span>🗑️</span> Delete Selected Image
-        </button>
-        <p className="text-xs text-gray-400">
-          Click on an image in the editor, then click this button to delete it permanently
-        </p>
+      {/* Editor Type Toggle Bar */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-4 p-3 bg-gray-900/80 rounded-xl border border-gray-800">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsRichText(true)}
+            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              isRichText
+                ? "bg-[#00B7B3] text-black shadow-lg shadow-[#00B7B3]/10"
+                : "text-gray-400 hover:text-white bg-transparent"
+            }`}
+          >
+            ✨ Rich Text Editor
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsRichText(false)}
+            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              !isRichText
+                ? "bg-[#00B7B3] text-black shadow-lg shadow-[#00B7B3]/10"
+                : "text-gray-400 hover:text-white bg-transparent"
+            }`}
+          >
+            📝 Plain HTML Editor
+          </button>
+        </div>
+        
+        {isRichText && (
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleImageDelete}
+              className="px-3 py-1.5 bg-red-950/40 text-red-400 border border-red-900/30 text-xs font-semibold rounded-lg hover:bg-red-900/20 transition flex items-center gap-1.5"
+            >
+              🗑️ Delete Image
+            </button>
+            <p className="text-[10px] text-gray-500 hidden sm:block">
+              {activeApiKey === "no-api-key" ? "⚡ Running in local development mode" : "🌐 Connected to TinyMCE Cloud"}
+            </p>
+          </div>
+        )}
       </div>
-      
-      <Editor
-        onInit={(evt, editor) => {
-          editorRef.current = editor;
-        }}
-        apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-        value={value}
-        onEditorChange={handleEditorChange}
-        init={{
-          height: height,
-          width: "100%",
-          menubar: "file edit view insert format tools table help",
-          
-          plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons',
-            'visualchars', 'nonbreaking', 'directionality'
-          ],
-          
-          toolbar: [
-            { name: 'history', items: ['undo', 'redo'] },
-            { name: 'formatting', items: ['bold', 'italic', 'underline', 'strikethrough', 'removeformat'] },
-            { name: 'alignment', items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify'] },
-            { name: 'lists', items: ['bullist', 'numlist', 'outdent', 'indent'] },
-            { name: 'styles', items: ['formatselect', 'fontsizeselect', 'fontselect'] },
-            { name: 'colors', items: ['forecolor', 'backcolor'] },
-            { name: 'insert', items: ['link', 'image', 'media', 'table', 'hr', 'charmap', 'emoticons'] },
-            { name: 'views', items: ['fullscreen', 'code', 'preview', 'visualblocks', 'visualchars'] },
-            { name: 'tools', items: ['searchreplace', 'wordcount', 'help'] }
-          ],
-          
-          toolbar1: 'undo redo | formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor',
-          toolbar2: 'alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | blockquote',
-          toolbar3: 'link image media table | hr charmap emoticons | removeformat',
-          toolbar4: 'fullscreen code preview | visualblocks visualchars | searchreplace wordcount help',
-          
-          fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt 72pt',
-          font_formats: 'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; Georgia=georgia,serif; Tahoma=tahoma,arial,helvetica,sans-serif; Times New Roman=times new roman,times,serif; Trebuchet MS=trebuchet ms,geneva,sans-serif; Verdana=verdana,geneva,sans-serif',
-          
-          skin: 'oxide-dark',
-          content_css: 'dark',
-          
-          content_style: `
-            body { 
-              font-family: Arial, Helvetica, sans-serif; 
-              font-size: 14px; 
-              line-height: 1.8;
-              color: #e0e0e0;
-              background: #1a1a1a;
-              padding: 20px;
-              margin: 0;
-            }
-            h1 { font-size: 2.5em; font-weight: bold; margin: 0.67em 0; color: #ffffff; }
-            h2 { font-size: 2em; font-weight: bold; margin: 0.83em 0; color: #f0f0f0; }
-            h3 { font-size: 1.5em; font-weight: bold; margin: 1em 0; color: #e8e8e8; }
-            h4 { font-size: 1.17em; font-weight: bold; margin: 1.33em 0; color: #e0e0e0; }
-            p { margin: 0 0 1.2em 0; }
-            a { color: #00B7B3; text-decoration: underline; }
-            a:hover { color: #00d4d0; }
-            blockquote { 
-              border-left: 4px solid #00B7B3; 
-              margin: 1em 0; 
-              padding-left: 20px; 
-              color: #b0b0b0;
-              font-style: italic;
-            }
-            img { 
-              max-width: 100%; 
-              height: auto; 
-              border-radius: 8px;
-              cursor: pointer;
-              margin: 10px 0;
-            }
-            img:focus { outline: 2px solid #00B7B3; outline-offset: 2px; }
-            table { 
-              border-collapse: collapse; 
-              width: 100%; 
-              margin: 1em 0;
-              background: #2a2a2a;
-            }
-            td, th { 
-              border: 1px solid #444; 
-              padding: 10px; 
-              text-align: left;
-            }
-            th { 
-              background: #333;
-              color: #fff;
-              font-weight: bold;
-            }
-            tr:nth-child(even) { background: #222; }
-            pre { 
-              background: #2d2d2d; 
-              padding: 15px; 
-              border-radius: 8px; 
-              overflow-x: auto;
-              border: 1px solid #444;
-              color: #e0e0e0;
-            }
-            code { 
-              background: #2d2d2d; 
-              padding: 3px 8px; 
-              border-radius: 4px; 
-              font-family: 'Courier New', monospace;
-              color: #e0e0e0;
-              border: 1px solid #444;
-            }
-            pre code { 
-              background: transparent; 
-              padding: 0; 
-              border: none;
-            }
-            ul, ol { margin: 0 0 1em 2em; }
-            li { margin: 0.3em 0; }
-            hr { 
-              border: 0; 
-              border-top: 2px solid #444; 
-              margin: 2em 0;
-            }
-          `,
-          
-          images_upload_handler: handleUpload,
-          automatic_uploads: true,
-          file_picker_types: 'image media',
-          image_caption: true,
-          image_advtab: true,
-          image_title: true,
-          image_dimensions: true,
-          
-          media_live_embeds: true,
-          media_alt_source: true,
-          media_poster: true,
-          
-          table_default_attributes: { border: '1', cellspacing: '0', cellpadding: '8' },
-          table_default_styles: { width: '100%', borderCollapse: 'collapse' },
-          table_resize_bars: true,
-          table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | tablecellmerge tablecellprops',
-          
-          relative_urls: false,
-          remove_script_host: false,
-          convert_urls: true,
-          
-          spellchecker_language: 'en',
-          spellchecker_languages: 'English=en, Hindi=hi, Spanish=es, French=fr, German=de',
-          
-          placeholder: placeholder,
-          statusbar: true,
-          resize: 'both',
-          branding: true,
-          
-          advlist_number_styles: 'lower-alpha,lower-roman,upper-alpha,upper-roman',
-          advlist_bullet_styles: 'circle,square,disc',
-          
-          setup: (editor) => {
-            editor.on('click', (e) => {
-              if (e.target.nodeName === 'IMG') {
-                editor.selection.select(e.target);
-              }
-            });
+
+      {isRichText ? (
+        <Editor
+          onInit={(evt, editor) => {
+            editorRef.current = editor;
+          }}
+          apiKey={activeApiKey}
+          value={value}
+          onEditorChange={handleEditorChange}
+          init={{
+            height: height,
+            width: "100%",
+            menubar: "file edit view insert format tools table help",
             
-            editor.on('dblclick', (e) => {
-              if (e.target.nodeName === 'IMG') {
-                editor.execCommand('mceImage');
-              }
-            });
+            plugins: [
+              'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+              'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+              'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons',
+              'visualchars', 'nonbreaking', 'directionality'
+            ],
             
-            editor.addShortcut('meta+b', 'Bold', () => editor.execCommand('Bold'));
-            editor.addShortcut('meta+i', 'Italic', () => editor.execCommand('Italic'));
-            editor.addShortcut('meta+u', 'Underline', () => editor.execCommand('Underline'));
-            editor.addShortcut('meta+z', 'Undo', () => editor.execCommand('Undo'));
-            editor.addShortcut('meta+shift+z', 'Redo', () => editor.execCommand('Redo'));
-            editor.addShortcut('meta+k', 'Link', () => editor.execCommand('mceLink'));
-          }
-        }}
-      />
+            toolbar: [
+              { name: 'history', items: ['undo', 'redo'] },
+              { name: 'formatting', items: ['bold', 'italic', 'underline', 'strikethrough', 'removeformat'] },
+              { name: 'alignment', items: ['alignleft', 'aligncenter', 'alignright', 'alignjustify'] },
+              { name: 'lists', items: ['bullist', 'numlist', 'outdent', 'indent'] },
+              { name: 'styles', items: ['formatselect', 'fontsizeselect', 'fontselect'] },
+              { name: 'colors', items: ['forecolor', 'backcolor'] },
+              { name: 'insert', items: ['link', 'image', 'media', 'table', 'hr', 'charmap', 'emoticons'] },
+              { name: 'views', items: ['fullscreen', 'code', 'preview', 'visualblocks', 'visualchars'] },
+              { name: 'tools', items: ['searchreplace', 'wordcount', 'help'] }
+            ],
+            
+            toolbar1: 'undo redo | formatselect fontselect fontsizeselect | bold italic underline strikethrough | forecolor backcolor',
+            toolbar2: 'alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | blockquote',
+            toolbar3: 'link image media table | hr charmap emoticons | removeformat',
+            toolbar4: 'fullscreen code preview | visualblocks visualchars | searchreplace wordcount help',
+            
+            fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt 72pt',
+            font_formats: 'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; Georgia=georgia,serif; Tahoma=tahoma,arial,helvetica,sans-serif; Times New Roman=times new roman,times,serif; Trebuchet MS=trebuchet ms,geneva,sans-serif; Verdana=verdana,geneva,sans-serif',
+            
+            skin: 'oxide-dark',
+            content_css: 'dark',
+            
+            content_style: `
+              body { 
+                font-family: Arial, Helvetica, sans-serif; 
+                font-size: 14px; 
+                line-height: 1.8;
+                color: #e0e0e0;
+                background: #1a1a1a;
+                padding: 20px;
+                margin: 0;
+              }
+              h1 { font-size: 2.5em; font-weight: bold; margin: 0.67em 0; color: #ffffff; }
+              h2 { font-size: 2em; font-weight: bold; margin: 0.83em 0; color: #f0f0f0; }
+              h3 { font-size: 1.5em; font-weight: bold; margin: 1em 0; color: #e8e8e8; }
+              h4 { font-size: 1.17em; font-weight: bold; margin: 1.33em 0; color: #e0e0e0; }
+              p { margin: 0 0 1.2em 0; }
+              a { color: #00B7B3; text-decoration: underline; }
+              a:hover { color: #00d4d0; }
+              blockquote { 
+                border-left: 4px solid #00B7B3; 
+                margin: 1em 0; 
+                padding-left: 20px; 
+                color: #b0b0b0;
+                font-style: italic;
+              }
+              img { 
+                max-width: 100%; 
+                height: auto; 
+                border-radius: 8px;
+                cursor: pointer;
+                margin: 10px 0;
+              }
+              img:focus { outline: 2px solid #00B7B3; outline-offset: 2px; }
+              table { 
+                border-collapse: collapse; 
+                width: 100%; 
+                margin: 1em 0;
+                background: #2a2a2a;
+              }
+              td, th { 
+                border: 1px solid #444; 
+                padding: 10px; 
+                text-align: left;
+              }
+              th { 
+                background: #333;
+                color: #fff;
+                font-weight: bold;
+              }
+              tr:nth-child(even) { background: #222; }
+              pre { 
+                background: #2d2d2d; 
+                padding: 15px; 
+                border-radius: 8px; 
+                overflow-x: auto;
+                border: 1px solid #444;
+                color: #e0e0e0;
+              }
+              code { 
+                background: #2d2d2d; 
+                padding: 3px 8px; 
+                border-radius: 4px; 
+                font-family: 'Courier New', monospace;
+                color: #e0e0e0;
+                border: 1px solid #444;
+              }
+              pre code { 
+                background: transparent; 
+                padding: 0; 
+                border: none;
+              }
+              ul, ol { margin: 0 0 1em 2em; }
+              li { margin: 0.3em 0; }
+              hr { 
+                border: 0; 
+                border-top: 2px solid #444; 
+                margin: 2em 0;
+              }
+            `,
+            
+            images_upload_handler: handleUpload,
+            automatic_uploads: true,
+            file_picker_types: 'image media',
+            image_caption: true,
+            image_advtab: true,
+            image_title: true,
+            image_dimensions: true,
+            
+            media_live_embeds: true,
+            media_alt_source: true,
+            media_poster: true,
+            
+            table_default_attributes: { border: '1', cellspacing: '0', cellpadding: '8' },
+            table_default_styles: { width: '100%', borderCollapse: 'collapse' },
+            table_resize_bars: true,
+            table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | tablecellmerge tablecellprops',
+            
+            relative_urls: false,
+            remove_script_host: false,
+            convert_urls: true,
+            
+            spellchecker_language: 'en',
+            spellchecker_languages: 'English=en, Hindi=hi, Spanish=es, French=fr, German=de',
+            
+            placeholder: placeholder,
+            statusbar: true,
+            resize: 'both',
+            branding: true,
+            
+            advlist_number_styles: 'lower-alpha,lower-roman,upper-alpha,upper-roman',
+            advlist_bullet_styles: 'circle,square,disc',
+            
+            setup: (editor) => {
+              editor.on('click', (e) => {
+                if (e.target.nodeName === 'IMG') {
+                  editor.selection.select(e.target);
+                }
+              });
+              
+              editor.on('dblclick', (e) => {
+                if (e.target.nodeName === 'IMG') {
+                  editor.execCommand('mceImage');
+                }
+              });
+              
+              editor.addShortcut('meta+b', 'Bold', () => editor.execCommand('Bold'));
+              editor.addShortcut('meta+i', 'Italic', () => editor.execCommand('Italic'));
+              editor.addShortcut('meta+u', 'Underline', () => editor.execCommand('Underline'));
+              editor.addShortcut('meta+z', 'Undo', () => editor.execCommand('Undo'));
+              editor.addShortcut('meta+shift+z', 'Redo', () => editor.execCommand('Redo'));
+              editor.addShortcut('meta+k', 'Link', () => editor.execCommand('mceLink'));
+            }
+          }}
+        />
+      ) : (
+        <textarea
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          className="w-full bg-black/60 border border-gray-700 rounded-xl p-4 text-white font-mono text-sm focus:outline-none focus:border-[#00B7B3] transition-all min-h-[300px]"
+          placeholder="Enter plain text or HTML content here..."
+        />
+      )}
     </div>
   );
 };
