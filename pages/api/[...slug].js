@@ -91,6 +91,7 @@ const contactRoutes = require('../../api_logic/routes/contactRoutes');
 
 // ✅ UNCOMMENT - BLOG ROUTES
 const blogRoutes = require('../../api_logic/routes/blogRoutes');
+const searchRoutes = require('../../api_logic/routes/searchRoutes');
 
 const app = express();
 
@@ -114,6 +115,7 @@ app.use('/api/admin/appointments', adminAppointmentRoutes);
 app.use('/api/contact', contactRoutes);
 // ✅ UNCOMMENT - BLOG ROUTES
 app.use('/api/blog', blogRoutes);
+app.use('/api/search', searchRoutes);
 
 console.log('✅ All routes loaded successfully');
 

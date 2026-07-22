@@ -308,7 +308,8 @@ import {
     Phone,
     Megaphone,
     Search,
-    Settings
+    Settings,
+    MessageSquare
 } from 'lucide-react';
 import HeroSlidesManager from '../components/Home/HeroSlidesManager';
 import FAQManager from '../components/Home/FAQManager';
@@ -316,6 +317,7 @@ import AboutSectionManager from '../components/Home/AboutSectionManager';
 import ContactInfoManager from '../components/Home/ContactInfoManager';
 import CTASectionManager from '../components/Home/CTASectionManager';
 import SEOManager from '../components/Home/SEOManager';
+import TestimonialsManager from '../components/Home/TestimonialsManager';
 
 const HomePageManager = () => {
     const [expandedSections, setExpandedSections] = useState({
@@ -324,7 +326,8 @@ const HomePageManager = () => {
         about: false,
         contact: false,
         cta: false,
-        seo: false
+        seo: false,
+        testimonials: false
     });
 
     const toggleSection = (section) => {
@@ -404,6 +407,15 @@ const HomePageManager = () => {
             description: 'Manage meta tags, OG tags, and SEO settings',
             badge: 'Advanced',
             badgeColor: 'bg-gray-500/20 text-gray-400'
+        },
+        { 
+            id: 'testimonials', 
+            label: 'Testimonials', 
+            icon: MessageSquare, 
+            component: TestimonialsManager, 
+            description: 'Manage client reviews and testimonials displayed on home page',
+            badge: 'Reviews',
+            badgeColor: 'bg-teal-500/20 text-teal-400'
         }
     ];
 

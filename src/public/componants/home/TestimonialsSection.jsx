@@ -52,18 +52,38 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+  const [testimonialsList, setTestimonialsList] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
-    if (!isAutoPlaying) return undefined;
+    const fetchTestimonials = async () => {
+      try {
+        const response = await fetch('/api/home/testimonials');
+        const result = await response.json();
+        if (result.success && result.data) {
+          const activeOnly = result.data.filter(t => t.isActive !== false);
+          setTestimonialsList(activeOnly.length > 0 ? activeOnly : testimonials);
+        } else {
+          setTestimonialsList(testimonials);
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        setTestimonialsList(testimonials);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying || testimonialsList.length === 0) return undefined;
 
     const interval = setInterval(() => {
-      setCurrentIndex((index) => (index + 1) % testimonials.length);
+      setCurrentIndex((index) => (index + 1) % testimonialsList.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, testimonialsList]);
 
   const pauseAutoPlay = () => {
     setIsAutoPlaying(false);
@@ -71,19 +91,23 @@ const TestimonialsSection = () => {
   };
 
   const nextTestimonial = () => {
+    if (testimonialsList.length === 0) return;
     pauseAutoPlay();
-    setCurrentIndex((index) => (index + 1) % testimonials.length);
+    setCurrentIndex((index) => (index + 1) % testimonialsList.length);
   };
 
   const previousTestimonial = () => {
+    if (testimonialsList.length === 0) return;
     pauseAutoPlay();
-    setCurrentIndex((index) => (index - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex((index) => (index - 1 + testimonialsList.length) % testimonialsList.length);
   };
 
   const goToTestimonial = (index) => {
     pauseAutoPlay();
     setCurrentIndex(index);
   };
+
+  if (testimonialsList.length === 0) return null;
 
   return (
     <section className="py-20 bg-gradient-to-b from-black to-black/95 relative overflow-hidden">
@@ -111,8 +135,8 @@ const TestimonialsSection = () => {
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {testimonials.map((testimonial) => (
-                <div key={testimonial.name} className="w-full flex-shrink-0 px-4">
+              {testimonialsList.map((testimonial, idx) => (
+                <div key={testimonial._id || idx} className="w-full flex-shrink-0 px-4">
                   <div className="bg-gradient-to-br from-black/80 to-black/60 backdrop-blur-sm border-2 border-[#00B7B3]/20 rounded-2xl p-8 md:p-10 hover:border-[#00B7B3]/40 transition-all duration-500">
                     <div className="flex flex-col md:flex-row items-center gap-8">
                       <div className="md:w-1/3 flex justify-center">
@@ -182,9 +206,9 @@ const TestimonialsSection = () => {
           </button>
 
           <div className="flex justify-center gap-3 mt-8">
-            {testimonials.map((testimonial, index) => (
+            {testimonialsList.map((testimonial, index) => (
               <button
-                key={testimonial.name}
+                key={testimonial._id || index}
                 onClick={() => goToTestimonial(index)}
                 className={`transition-all duration-300 ${
                   index === currentIndex

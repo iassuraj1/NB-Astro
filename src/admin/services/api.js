@@ -630,7 +630,13 @@ export const homeAPI = {
     getCompleteHomeData: () => api.get('/home/complete'),
     
     // Bulk Update (for admin panel)
-    updateMultipleSections: (data) => api.post('/home/bulk-update', data)
+    updateMultipleSections: (data) => api.post('/home/bulk-update', data),
+
+    // Testimonials
+    getTestimonials: () => api.get('/home/testimonials'),
+    createTestimonial: (data) => api.post('/home/testimonials', data),
+    updateTestimonial: (id, data) => api.put(`/home/testimonials/${id}`, data),
+    deleteTestimonial: (id) => api.delete(`/home/testimonials/${id}`)
 };
 
 // ==================== IMAGE UPLOAD APIs ====================

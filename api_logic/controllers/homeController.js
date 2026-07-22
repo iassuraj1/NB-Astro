@@ -1375,3 +1375,109 @@ exports.getSitemapData = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// ==================== TESTIMONIALS CONTROLLERS ====================
+const Testimonial = require('../models/Testimonial');
+
+const defaultTestimonials = [
+  {
+    name: 'Priya Sharma',
+    location: 'Mumbai',
+    rating: 5,
+    text: 'Naveen Bhagat ji predicted my marriage timeline accurately. Got married within 6 months of consultation!',
+    service: 'Marriage Astrology',
+    image: 'https://images.unsplash.com/photo-1494790108777-466d829a6c3c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Rahul Mehta',
+    location: 'Delhi',
+    rating: 5,
+    text: 'The vastu remedies suggested by him brought positive energy to our office. Business improved significantly.',
+    service: 'Vastu Consultation',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Anita Desai',
+    location: 'Pune',
+    rating: 5,
+    text: 'His career guidance was spot on. Got promotion within 3 months as he predicted.',
+    service: 'Career Horoscope',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Vikram Singh',
+    location: 'Jaipur',
+    rating: 5,
+    text: 'Very accurate kundli matching for my daughter. The couple is living happily.',
+    service: 'Kundli Milan',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Neha Gupta',
+    location: 'Bangalore',
+    rating: 5,
+    text: 'The remedies for health issues worked wonders. Feeling much better now. Highly recommended!',
+    service: 'Medical Astrology',
+    image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  },
+  {
+    name: 'Amit Kumar',
+    location: 'Chennai',
+    rating: 5,
+    text: 'Accurate predictions about my business expansion. Followed his advice and got excellent results.',
+    service: 'Business Astrology',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'
+  }
+];
+
+exports.getTestimonials = async (req, res) => {
+    try {
+        const testimonials = await Testimonial.find().sort('order');
+        if (testimonials.length === 0) {
+            return res.json({ success: true, data: defaultTestimonials });
+        }
+        res.json({ success: true, data: testimonials });
+    } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.createTestimonial = async (req, res) => {
+    try {
+        const testimonial = await Testimonial.create(req.body);
+        res.status(201).json({ success: true, data: testimonial, message: 'Testimonial created successfully' });
+    } catch (error) {
+        console.error('Error creating testimonial:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.updateTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const testimonial = await Testimonial.findByIdAndUpdate(id, req.body, { new: true });
+        if (!testimonial) {
+            return res.status(404).json({ success: false, message: 'Testimonial not found' });
+        }
+        res.json({ success: true, data: testimonial, message: 'Testimonial updated successfully' });
+    } catch (error) {
+        console.error('Error updating testimonial:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.deleteTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const testimonial = await Testimonial.findByIdAndDelete(id);
+        if (!testimonial) {
+            return res.status(404).json({ success: false, message: 'Testimonial not found' });
+        }
+        res.json({ success: true, message: 'Testimonial deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting testimonial:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+

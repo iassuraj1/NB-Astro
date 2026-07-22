@@ -32,7 +32,11 @@ const {
     updateCTASection,
     getSeoConfig,
     updateSeoConfig,
-    getSitemapData
+    getSitemapData,
+    getTestimonials,
+    createTestimonial,
+    updateTestimonial,
+    deleteTestimonial
 } = require('../controllers/homeController');
 
 // Ensure upload directories exist inside the public directory
@@ -161,6 +165,12 @@ router.put('/cta-section', protect, updateCTASection);
 router.route('/seo')
     .get(getSeoConfig)
     .put(protect, updateSeoConfig);
+
+// ==================== TESTIMONIALS ROUTES ====================
+router.get('/testimonials', getTestimonials);
+router.post('/testimonials', protect, createTestimonial);
+router.put('/testimonials/:id', protect, updateTestimonial);
+router.delete('/testimonials/:id', protect, deleteTestimonial);
 
 router.get('/sitemap', getSitemapData);
 

@@ -783,7 +783,13 @@ const HeroSection = () => {
                                 fetchPriority={currentSlide === 0 ? "high" : "low"}
                                 onError={(e) => {
                                     console.error('Image failed to load:', slides[currentSlide].image);
-                                    e.target.src = 'https://via.placeholder.com/1920x1080?text=Image+Not+Found';
+                                    const fallbackUrl = 'https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80';
+                                    const picture = e.target.closest('picture');
+                                    if (picture) {
+                                        const sources = picture.querySelectorAll('source');
+                                        sources.forEach(src => src.srcSet = fallbackUrl);
+                                    }
+                                    e.target.src = fallbackUrl;
                                 }}
                             />
                         </picture>

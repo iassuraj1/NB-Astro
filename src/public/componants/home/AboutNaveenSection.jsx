@@ -178,27 +178,22 @@ const AboutNaveenSection = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           
-          {/* LEFT – PREMIUM GRADIENT CARD */}
+          {/* LEFT – PREMIUM CONTENT */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="order-2 lg:order-1 relative z-50"
+            className="order-2 lg:order-1 relative z-50 py-4"
           >
-            <div className="relative rounded-3xl p-8 md:p-12 shadow-2xl overflow-hidden bg-gradient-to-br from-[#1a222d] via-[#1a2630] to-[#0f1722] border border-white/10">
-              <div className="absolute -top-20 -right-20 w-64 h-64 bg-teal-500/20 rounded-full blur-[100px]" />
-              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-400/10 rounded-full blur-[100px]" />
-
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-[#00B7B3]/10 flex items-center justify-center border border-[#00B7B3]/20">
-                    <CrystalBallIcon />
-                  </div>
-                  <span className="text-[#00B7B3] text-sm uppercase tracking-wider font-semibold">
-                    About {aboutData?.name || 'Naveen Bhagat Ji'}
-                  </span>
-                </div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#00B7B3]/10 flex items-center justify-center border border-[#00B7B3]/20">
+                <CrystalBallIcon />
+              </div>
+              <span className="text-[#00B7B3] text-sm uppercase tracking-wider font-semibold">
+                About {aboutData?.name || 'Naveen Bhagat Ji'}
+              </span>
+            </div>
 
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
                   Master Astrologer with{' '}
@@ -223,7 +218,7 @@ const AboutNaveenSection = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -274,7 +269,7 @@ const AboutNaveenSection = () => {
                     <span className="w-1.5 h-1.5 bg-[#00B7B3] rounded-full"></span>
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {(aboutData?.principles || []).map((item, index) => (
                       <motion.div
                         key={index}
@@ -298,8 +293,6 @@ const AboutNaveenSection = () => {
                     <path d="M10.8333 5L15.8333 10L10.8333 15" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </Link>
-              </div>
-            </div>
           </motion.div>
 
           {/* RIGHT – IMAGE */}

@@ -3210,7 +3210,7 @@ const VastuCoursesPage = ({ initialPageContent }) => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-20">
                     <div className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-r from-[#00B7B3]/20 to-transparent blur-3xl opacity-20 group-hover:opacity-40"></div>
-                        <div className="relative bg-gradient-to-br from-black/80 via-black/60 to-black/80 border border-[#00B7B3]/20 rounded-3xl p-10 lg:p-12 backdrop-blur-sm overflow-hidden">
+                        <div className="relative bg-gradient-to-br from-black/80 via-black/60 to-black/80 border border-[#00B7B3]/20 rounded-3xl p-5 sm:p-10 lg:p-12 backdrop-blur-sm overflow-hidden">
                             <div className="absolute top-0 right-0 w-40 h-40 bg-[#00B7B3]/5 rounded-full blur-3xl"></div>
                             <div className="flex items-center gap-3 mb-8">
                                 <MandalaIcon />
@@ -3260,7 +3260,13 @@ const VastuCoursesPage = ({ initialPageContent }) => {
                                             <div className="relative overflow-hidden rounded-2xl">
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
                                                 <img src={course.image ? `${course.image}` : 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'} 
-                                                    alt={course.title} className="w-full h-[280px] md:h-[350px] object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                    alt={course.title} 
+                                                    className="w-full h-[280px] md:h-[350px] object-cover group-hover:scale-110 transition-transform duration-700" 
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                                                    }}
+                                                />
                                                 <div className="absolute top-4 left-4 z-20">
                                                     <span className="px-4 py-2 bg-gradient-to-r from-[#00B7B3] to-[#33C5C2] text-black rounded-full text-sm font-semibold shadow-lg">
                                                         {getCourseType(course)}
@@ -3307,16 +3313,16 @@ const VastuCoursesPage = ({ initialPageContent }) => {
                                                     )}
                                                 </div>
                                             )}
-                                            <div className="flex flex-wrap items-center gap-4 pt-4">
+                                            <div className="grid grid-cols-2 gap-2 pt-4 w-full">
                                                 <Link href={`/courses/${course.slug || course.title.toLowerCase().replace(/\s+/g, '-')}/book`}
-                                                    className="group/btn px-8 py-3 bg-gradient-to-r from-[#00B7B3] to-[#33C5C2] text-black rounded-full font-semibold hover:shadow-lg flex items-center gap-2">
+                                                    className="group/btn px-1 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-[#00B7B3] to-[#33C5C2] text-black rounded-lg font-semibold hover:shadow-lg flex items-center justify-center gap-1 text-[11px] sm:text-sm text-center">
                                                     BOOK A SEAT
-                                                    <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <svg className="hidden sm:inline-block w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                     </svg>
                                                 </Link>
                                                 <Link href={`/courses/${course.slug || course.title.toLowerCase().replace(/\s+/g, '-')}/details`}
-                                                    className="px-8 py-3 border-2 border-[#00B7B3] text-[#00B7B3] rounded-full font-semibold hover:bg-[#00B7B3]/10">
+                                                    className="px-1 sm:px-8 py-2.5 sm:py-3 border-2 border-[#00B7B3] text-[#00B7B3] rounded-lg font-semibold hover:bg-[#00B7B3]/10 text-[11px] sm:text-sm text-center">
                                                     VIEW DETAILS
                                                 </Link>
                                             </div>
@@ -3370,9 +3376,9 @@ const VastuCoursesPage = ({ initialPageContent }) => {
                                 {pageContent?.ctaDescription || 'Join our Vastu certification program and transform lives through the power of balanced spaces'}
                             </p>
                             <Link href={pageContent?.ctaButtonLink || '/contact'}
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#00B7B3] rounded-full font-bold hover:scale-105 transition-all duration-300 shadow-xl">
+                                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-[#00B7B3] rounded-full font-bold hover:scale-105 transition-all duration-300 shadow-xl text-xs sm:text-base">
                                 {pageContent?.ctaButtonText || 'Book Free Consultation'}
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="hidden sm:inline-block w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
                             </Link>

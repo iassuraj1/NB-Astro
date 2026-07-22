@@ -207,3 +207,23 @@ body {
 .duration-500 {
   transition-duration: 500ms;
 }
+
+/* ============================================ */
+/* MOBILE RESPONSIVENESS SAFETY RULES */
+/* ============================================ */
+@media (max-width: 640px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  main {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  /* Force safety margin/padding for all wrapper containers on mobile */
+  .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl, .max-w-3xl, .max-w-2xl, .container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+
